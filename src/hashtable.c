@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <hashtable.h>
 
 #define INIT 5381
 #define HASHTABLE_CAPACITY 16
@@ -26,12 +27,6 @@ uint32_t get_idx(char *s, uint32_t m) {
     return hash_f(s) % m;
 }
 
-typedef struct ht_node {
-    char *key;
-    char *value;
-    struct ht_node *next;
-} ht_node;
-
 ht_node *ht_node_new(char *key, char *value) {
     ht_node *node = (ht_node*) malloc(sizeof(ht_node));
     node->key = (char*) malloc(strlen(key));
@@ -47,23 +42,17 @@ void ht_node_free(ht_node *node) {
     free(node);
 }
 
-typedef struct h_table {
-    int cap;
-    int size;
-    ht_node **table;
-} h_table;
-
 h_table *ht_new(void) {
     h_table *ht = (h_table*) malloc(sizeof(h_table));
     ht->cap = HASHTABLE_CAPACITY;
     ht->size = 0;
-    ht->table = (ht_node**) calloc(ht->cap, sizeof(ht_node*));
+    ht->table = (ht_node**) calloc(ht->cap, sizeof(ht_node));
     memset(ht->table, 0, ht->cap);
     return ht;
 }
 
 void ht_free(h_table *ht) {
-    for (int i = 0; i < ht->cap; i++) {
+    for (size_t i = 0; i < ht->cap; i++) {
         ht_node *node = ht->table[i];
         while (node != NULL) {
             ht_node *temp = node;
@@ -76,10 +65,10 @@ void ht_free(h_table *ht) {
 }
 
 void ht_expand_and_rehash(h_table *ht) {
-    int cap = ht->cap * 2;
+    size_t cap = ht->cap * 2;
     ht_node **table = (ht_node**) malloc(cap * sizeof(ht_node));
     memset(table, 0, cap * sizeof(ht_node));
-    for (int i = 0; i < ht->cap; i++) {
+    for (size_t i = 0; i < ht->cap; i++) {
         ht_node *node = ht->table[i];
         while (node != NULL) {
             ht_node *next = node->next;
