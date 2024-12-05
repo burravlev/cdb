@@ -23,5 +23,6 @@ void ht_free(h_table *ht);
 
 void ht_put(h_table *ht, char *key, char *value);
 char *ht_get(h_table *ht, char *key);
+void ht_remove(h_table *ht, char *key);
 
 #endif
