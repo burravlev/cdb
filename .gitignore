@@ -2,3 +2,8 @@ obj/
 *.dSYM
 a.out
 cdb
+Makefile
+cmake_install.cmake
+CMakeCache.txt
+libcdb_lib.a
+CMakeFiles/

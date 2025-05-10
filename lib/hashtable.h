@@ -19,6 +19,7 @@ typedef struct h_table {
 } h_table;
 
 h_table *ht_new(void);
+void ht_init(h_table *ht);
 void ht_free(h_table *ht);
 
 void ht_put(h_table *ht, char *key, char *value);

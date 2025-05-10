@@ -9,7 +9,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <hashtable.h>
+
+#include "../lib/hashtable.h"
 
 #define INIT 5381
 #define HASHTABLE_CAPACITY 16
@@ -40,6 +41,13 @@ void ht_node_free(ht_node *node) {
     free(node->key);
     free(node->value);
     free(node);
+}
+
+void ht_init(h_table* ht) {
+    ht->cap = HASHTABLE_CAPACITY;
+    ht->size = 0;
+    ht->table = (ht_node**) calloc(ht->cap, sizeof(ht_node));
+    memset(ht->table, 0, ht->cap);
 }
 
 h_table *ht_new(void) {
